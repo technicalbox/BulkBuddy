@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Dimensions,
+  useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -27,12 +27,12 @@ import { PressableScale } from '../../components/common/PressableScale';
 import { LogWeightModal } from '../../components/common/LogWeightModal';
 import { hapticSelection } from '../../utils/haptics';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const CHART_WIDTH = SCREEN_WIDTH - 64;
 const CHART_HEIGHT = 160;
 
 export default function ProgressScreen() {
   const { weights, goals, logWeight } = usePrototype();
+  const { width: windowWidth } = useWindowDimensions();
+  const chartWidth = Math.max(260, windowWidth - 64);
 
   const [range, setRange] = useState<'1 week' | '4 weeks' | '3 months'>('4 weeks');
   const [metric, setMetric] = useState<'weight' | 'calories' | 'protein'>('weight');
@@ -89,7 +89,7 @@ export default function ProgressScreen() {
     const effectiveHeight = CHART_HEIGHT - paddingY * 2;
 
     const coords = chartData.map((d, i) => {
-      const x = (i / (chartData.length - 1)) * CHART_WIDTH;
+      const x = (i / (chartData.length - 1)) * chartWidth;
       const y =
         CHART_HEIGHT -
         paddingY -
@@ -109,7 +109,7 @@ export default function ProgressScreen() {
     const aPath = `${lPath} L ${coords[coords.length - 1].x} ${CHART_HEIGHT} L ${coords[0].x} ${CHART_HEIGHT} Z`;
 
     return { linePath: lPath, areaPath: aPath, points: coords };
-  }, [chartData, metric]);
+  }, [chartData, metric, chartWidth]);
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
@@ -225,7 +225,7 @@ export default function ProgressScreen() {
           {/* SVG Line & Gradient Fill Chart */}
           <View style={styles.chartContainer}>
             {points.length >= 2 ? (
-              <Svg width={CHART_WIDTH} height={CHART_HEIGHT}>
+              <Svg width={chartWidth} height={CHART_HEIGHT}>
                 <Defs>
                   <SvgLinearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
                     <Stop offset="0" stopColor={Colors.lavender} stopOpacity="0.45" />
@@ -261,11 +261,23 @@ export default function ProgressScreen() {
 
             {/* Date axis labels */}
             <View style={styles.dateLabelsRow}>
-              {points.map((p, idx) => (
-                <Text key={idx} style={styles.dateLabel}>
-                  {p.date}
-                </Text>
-              ))}
+              {points.length <= 4 ? (
+                points.map((p, idx) => (
+                  <Text key={idx} style={styles.dateLabel}>
+                    {p.date}
+                  </Text>
+                ))
+              ) : (
+                <>
+                  <Text style={styles.dateLabel}>{points[0]?.date}</Text>
+                  <Text style={styles.dateLabel}>
+                    {points[Math.floor(points.length / 2)]?.date}
+                  </Text>
+                  <Text style={styles.dateLabel}>
+                    {points[points.length - 1]?.date}
+                  </Text>
+                </>
+              )}
             </View>
           </View>
         </View>
@@ -444,19 +456,24 @@ const styles = StyleSheet.create({
   },
   chartValueRow: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'flex-end',
     gap: 4,
     marginTop: 2,
+    paddingBottom: 2,
   },
   chartLatestVal: {
     fontFamily: Typography.fontFamilyBold,
-    fontSize: 30,
+    fontSize: 28,
     color: Colors.foreground,
+    lineHeight: 32,
+    includeFontPadding: false,
   },
   chartUnit: {
     fontFamily: Typography.fontFamilyMedium,
     fontSize: 14,
     color: Colors.mutedForeground,
+    marginBottom: 2,
+    includeFontPadding: false,
   },
   deltaBadge: {
     paddingHorizontal: 10,
@@ -488,6 +505,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamilyRegular,
     fontSize: 10,
     color: Colors.mutedForeground,
+    includeFontPadding: false,
   },
   insightsSection: {
     gap: 12,
@@ -520,19 +538,24 @@ const styles = StyleSheet.create({
   },
   insightValRow: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'flex-end',
     gap: 4,
     marginBottom: 4,
+    paddingBottom: 2,
   },
   insightBigVal: {
     fontFamily: Typography.fontFamilyBold,
     fontSize: 24,
     color: Colors.foreground,
+    lineHeight: 28,
+    includeFontPadding: false,
   },
   insightUnit: {
     fontFamily: Typography.fontFamilyMedium,
     fontSize: 12,
     color: Colors.mutedForeground,
+    marginBottom: 2,
+    includeFontPadding: false,
   },
   insightDesc: {
     fontFamily: Typography.fontFamilyRegular,

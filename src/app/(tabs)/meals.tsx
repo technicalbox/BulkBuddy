@@ -319,29 +319,35 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     gap: 12,
     marginBottom: 14,
   },
   calPill: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'flex-end',
+    paddingBottom: 2,
     gap: 3,
   },
   calNumber: {
     fontFamily: Typography.fontFamilyBold,
     fontSize: 18,
     color: Colors.foreground,
+    lineHeight: 22,
+    includeFontPadding: false,
   },
   calUnit: {
-    fontFamily: Typography.fontFamilyRegular,
+    fontFamily: Typography.fontFamilyMedium,
     fontSize: 11,
     color: Colors.mutedForeground,
+    marginBottom: 1,
+    includeFontPadding: false,
   },
   proteinText: {
     fontFamily: Typography.fontFamilyMedium,
     fontSize: 12,
     color: Colors.mutedForeground,
+    includeFontPadding: false,
   },
   viewRecipeBtn: {
     backgroundColor: Colors.background,

@@ -235,22 +235,26 @@ const styles = StyleSheet.create({
   },
   entryInfo: {
     flex: 1,
+    marginRight: 8,
   },
   entryName: {
     fontFamily: Typography.fontFamilySemiBold,
     fontSize: 14,
     color: Colors.foreground,
+    includeFontPadding: false,
   },
   entryServing: {
     fontFamily: Typography.fontFamilyRegular,
     fontSize: 11,
     color: Colors.mutedForeground,
     marginTop: 2,
+    includeFontPadding: false,
   },
   entryCals: {
-    fontFamily: Typography.fontFamilyMedium,
+    fontFamily: Typography.fontFamilySemiBold,
     fontSize: 13,
     color: Colors.foreground,
+    includeFontPadding: false,
   },
   deleteButton: {
     width: 36,

@@ -142,7 +142,7 @@ function usePrototypeState() {
     setWeights((prev) => [
       ...prev,
       {
-        date: 'Oct 11',
+        date: `Oct ${day}`,
         weight: kg,
         calories: totals.calories,
         protein: totals.protein,

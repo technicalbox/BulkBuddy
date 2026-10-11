@@ -27,10 +27,18 @@ export default function ProfileScreen() {
   const { goals, setGoals, setNotice, reset } = usePrototype();
 
   const [form, setForm] = useState<Goals>(goals);
+  const [caloriesStr, setCaloriesStr] = useState(String(goals.calories));
+  const [proteinStr, setProteinStr] = useState(String(goals.protein));
+  const [carbsStr, setCarbsStr] = useState(String(goals.carbs));
+  const [fatStr, setFatStr] = useState(String(goals.fat));
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     setForm(goals);
+    setCaloriesStr(String(goals.calories));
+    setProteinStr(String(goals.protein));
+    setCarbsStr(String(goals.carbs));
+    setFatStr(String(goals.fat));
   }, [goals]);
 
   const patch = <K extends keyof Goals>(key: K, value: Goals[K]) => {
@@ -38,16 +46,25 @@ export default function ProfileScreen() {
   };
 
   const handleSave = () => {
+    const parsedCalories = parseInt(caloriesStr, 10);
+    const parsedProtein = parseInt(proteinStr, 10);
+    const parsedCarbs = parseInt(carbsStr, 10);
+    const parsedFat = parseInt(fatStr, 10);
+
     const e: Record<string, string> = {};
     if (!form.name.trim()) e['name'] = 'Enter a name.';
-    if (form.calories < 1200 || form.calories > 6000) {
+    if (isNaN(parsedCalories) || parsedCalories < 1200 || parsedCalories > 6000) {
       e['calories'] = 'Use a target from 1,200 to 6,000 kcal.';
     }
-    (['protein', 'carbs', 'fat'] as const).forEach((k) => {
-      if (form[k] < 1 || form[k] > 800) {
-        e[k] = 'Enter a value from 1 to 800 g.';
-      }
-    });
+    if (isNaN(parsedProtein) || parsedProtein < 1 || parsedProtein > 800) {
+      e['protein'] = 'Enter a value from 1 to 800 g.';
+    }
+    if (isNaN(parsedCarbs) || parsedCarbs < 1 || parsedCarbs > 800) {
+      e['carbs'] = 'Enter a value from 1 to 800 g.';
+    }
+    if (isNaN(parsedFat) || parsedFat < 1 || parsedFat > 800) {
+      e['fat'] = 'Enter a value from 1 to 800 g.';
+    }
 
     if (
       form.targetWeight &&
@@ -60,7 +77,14 @@ export default function ProfileScreen() {
 
     if (Object.keys(e).length === 0) {
       hapticSuccess();
-      setGoals(form);
+      const updatedGoals: Goals = {
+        ...form,
+        calories: parsedCalories,
+        protein: parsedProtein,
+        carbs: parsedCarbs,
+        fat: parsedFat,
+      };
+      setGoals(updatedGoals);
       setNotice('Goals and preferences saved to this device.');
     }
   };
@@ -146,8 +170,8 @@ export default function ProfileScreen() {
               <Text style={styles.fieldLabel}>Calories (kcal)</Text>
               <TextInput
                 style={[styles.input, errors['calories'] && styles.inputError]}
-                value={String(form.calories)}
-                onChangeText={(v) => patch('calories', parseInt(v) || 0)}
+                value={caloriesStr}
+                onChangeText={setCaloriesStr}
                 keyboardType="numeric"
               />
               {errors['calories'] && (
@@ -159,10 +183,13 @@ export default function ProfileScreen() {
               <Text style={styles.fieldLabel}>Protein (g)</Text>
               <TextInput
                 style={[styles.input, errors['protein'] && styles.inputError]}
-                value={String(form.protein)}
-                onChangeText={(v) => patch('protein', parseInt(v) || 0)}
+                value={proteinStr}
+                onChangeText={setProteinStr}
                 keyboardType="numeric"
               />
+              {errors['protein'] && (
+                <Text style={styles.errorText}>{errors['protein']}</Text>
+              )}
             </View>
           </View>
 
@@ -170,21 +197,27 @@ export default function ProfileScreen() {
             <View style={[styles.field, styles.halfField]}>
               <Text style={styles.fieldLabel}>Carbs (g)</Text>
               <TextInput
-                style={styles.input}
-                value={String(form.carbs)}
-                onChangeText={(v) => patch('carbs', parseInt(v) || 0)}
+                style={[styles.input, errors['carbs'] && styles.inputError]}
+                value={carbsStr}
+                onChangeText={setCarbsStr}
                 keyboardType="numeric"
               />
+              {errors['carbs'] && (
+                <Text style={styles.errorText}>{errors['carbs']}</Text>
+              )}
             </View>
 
             <View style={[styles.field, styles.halfField]}>
               <Text style={styles.fieldLabel}>Fat (g)</Text>
               <TextInput
-                style={styles.input}
-                value={String(form.fat)}
-                onChangeText={(v) => patch('fat', parseInt(v) || 0)}
+                style={[styles.input, errors['fat'] && styles.inputError]}
+                value={fatStr}
+                onChangeText={setFatStr}
                 keyboardType="numeric"
               />
+              {errors['fat'] && (
+                <Text style={styles.errorText}>{errors['fat']}</Text>
+              )}
             </View>
           </View>
 

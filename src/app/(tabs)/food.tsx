@@ -413,32 +413,40 @@ const styles = StyleSheet.create({
   },
   foodInfo: {
     flex: 1,
+    marginRight: 8,
   },
   foodName: {
     fontFamily: Typography.fontFamilySemiBold,
     fontSize: 15,
     color: Colors.foreground,
+    includeFontPadding: false,
   },
   foodServing: {
     fontFamily: Typography.fontFamilyRegular,
     fontSize: 12,
     color: Colors.mutedForeground,
     marginTop: 2,
+    includeFontPadding: false,
   },
   calPill: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'flex-end',
+    paddingBottom: 2,
     gap: 3,
   },
   calNumber: {
     fontFamily: Typography.fontFamilyBold,
     fontSize: 16,
     color: Colors.foreground,
+    lineHeight: 20,
+    includeFontPadding: false,
   },
   calUnit: {
-    fontFamily: Typography.fontFamilyRegular,
+    fontFamily: Typography.fontFamilyMedium,
     fontSize: 11,
     color: Colors.mutedForeground,
+    marginBottom: 1,
+    includeFontPadding: false,
   },
   emptyContainer: {
     backgroundColor: '#FFFFFF',

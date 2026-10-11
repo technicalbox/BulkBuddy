@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -18,8 +18,6 @@ interface EnergyOrbitalHeroProps {
   target: number;
   reducedMotion?: boolean;
 }
-
-const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
 export function EnergyOrbitalHero({
   remaining,
@@ -58,15 +56,17 @@ export function EnergyOrbitalHero({
       false
     );
 
+    // Continuous 360-degree orbital motion (not reverse pendulum)
     satelliteProgress.value = withRepeat(
-      withTiming(1, { duration: 9000, easing: Easing.inOut(Easing.sin) }),
+      withTiming(1, { duration: 9000, easing: Easing.linear }),
       -1,
-      true
+      false
     );
   }, [reducedMotion]);
 
   const orbit1Style = useAnimatedStyle(() => ({
     transform: [
+      { perspective: 850 },
       { rotateZ: '-12deg' },
       { rotateX: '62deg' },
       { rotateZ: `${orbit1Rot.value}deg` },
@@ -75,6 +75,7 @@ export function EnergyOrbitalHero({
 
   const orbit2Style = useAnimatedStyle(() => ({
     transform: [
+      { perspective: 850 },
       { rotateZ: '48deg' },
       { rotateY: '60deg' },
       { rotateZ: `${orbit2Rot.value}deg` },
@@ -215,10 +216,10 @@ const styles = StyleSheet.create({
   },
   calorieNumber: {
     fontFamily: Typography.fontFamilySemiBold,
-    fontSize: 74,
+    fontSize: 68,
     color: Colors.foreground,
-    lineHeight: 76,
-    letterSpacing: -2,
+    lineHeight: Platform.OS === 'android' ? 78 : 72,
+    letterSpacing: -1.5,
     includeFontPadding: false,
     textShadowColor: 'rgba(255, 255, 255, 0.75)',
     textShadowOffset: { width: 0, height: 2 },
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamilyMedium,
     fontSize: 15,
     color: Colors.foreground,
-    marginTop: 6,
+    marginTop: 4,
   },
   targetSubtext: {
     fontFamily: Typography.fontFamilyRegular,
