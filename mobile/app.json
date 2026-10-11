@@ -1,0 +1,69 @@
+{
+  "expo": {
+    "name": "BulkBuddy",
+    "slug": "bulkbuddy",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "bulkbuddy",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.adilkhan.bulkbuddy",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "BulkBuddy uses your camera to snap photos of your meals to track calories and macros.",
+        "NSPhotoLibraryUsageDescription": "BulkBuddy accesses your photos so you can select meal photos to track calories and macros."
+      }
+    },
+    "android": {
+      "package": "com.adilkhan.bulkbuddy",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#161224",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#161224",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 120
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "BulkBuddy accesses your photos so you can select meal photos to track calories and macros.",
+          "cameraPermission": "BulkBuddy uses your camera to snap photos of your meals to track calories and macros."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "2ac2c909-4ef9-4515-b9ac-9ec7d87a5026"
+      }
+    }
+  }
+}
