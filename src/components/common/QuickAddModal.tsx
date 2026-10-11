@@ -1,0 +1,270 @@
+import React, { useState } from 'react';
+import {
+  Modal,
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { Search, Camera, Scale, X, Check } from 'lucide-react-native';
+import { Colors, Typography, Shadows } from '../../constants/theme';
+import { PressableScale } from './PressableScale';
+import { hapticMedium, hapticSuccess } from '../../utils/haptics';
+
+interface QuickAddModalProps {
+  visible: boolean;
+  onClose: () => void;
+  onLogWeight: (kg: number) => void;
+}
+
+export function QuickAddModal({
+  visible,
+  onClose,
+  onLogWeight,
+}: QuickAddModalProps) {
+  const router = useRouter();
+  const [weight, setWeight] = useState('62.5');
+
+  const handleFoodPress = () => {
+    onClose();
+    router.push('/food' as any);
+  };
+
+  const handlePhotoPress = () => {
+    onClose();
+    router.push('/photo' as any);
+  };
+
+  const handleSaveWeight = () => {
+    const n = parseFloat(weight);
+    if (!isNaN(n) && n > 20 && n < 400) {
+      hapticSuccess();
+      onLogWeight(n);
+      onClose();
+    }
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.overlay}>
+          <TouchableWithoutFeedback>
+            <View style={styles.sheet}>
+              <View style={styles.header}>
+                <View>
+                  <Text style={styles.title}>Quick add</Text>
+                  <Text style={styles.subtitle}>Choose what you’d like to log.</Text>
+                </View>
+                <PressableScale style={styles.closeBtn} onPress={onClose}>
+                  <X size={20} color={Colors.mutedForeground} />
+                </PressableScale>
+              </View>
+
+              <View style={styles.optionsList}>
+                <PressableScale
+                  haptic
+                  style={styles.optionRow}
+                  onPress={handleFoodPress}
+                >
+                  <View style={[styles.iconBox, { backgroundColor: Colors.skySoft }]}>
+                    <Search size={20} color={Colors.sky} />
+                  </View>
+                  <View style={styles.optionInfo}>
+                    <Text style={styles.optionTitle}>Search Food</Text>
+                    <Text style={styles.optionDesc}>
+                      Browse library, recent foods, or portions
+                    </Text>
+                  </View>
+                </PressableScale>
+
+                <PressableScale
+                  haptic
+                  style={styles.optionRow}
+                  onPress={handlePhotoPress}
+                >
+                  <View
+                    style={[styles.iconBox, { backgroundColor: Colors.lavenderSoft }]}
+                  >
+                    <Camera size={20} color={Colors.lavender} />
+                  </View>
+                  <View style={styles.optionInfo}>
+                    <Text style={styles.optionTitle}>Photo estimate</Text>
+                    <Text style={styles.optionDesc}>
+                      Simulated transparent portion scanner
+                    </Text>
+                  </View>
+                </PressableScale>
+              </View>
+
+              {/* Inline weight logger */}
+              <View style={styles.weightCard}>
+                <View style={styles.weightHeader}>
+                  <Scale size={18} color={Colors.primary} />
+                  <Text style={styles.weightTitle}>Log today’s weight</Text>
+                </View>
+
+                <View style={styles.weightInputRow}>
+                  <TextInput
+                    style={styles.input}
+                    value={weight}
+                    onChangeText={setWeight}
+                    keyboardType="decimal-pad"
+                    placeholder="62.5"
+                    placeholderTextColor={Colors.mutedForeground}
+                  />
+                  <Text style={styles.unitText}>kg</Text>
+                  <PressableScale
+                    style={styles.saveWeightBtn}
+                    onPress={handleSaveWeight}
+                  >
+                    <Check size={16} color="#FFFFFF" strokeWidth={2.4} />
+                    <Text style={styles.saveWeightBtnText}>Save</Text>
+                  </PressableScale>
+                </View>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+}
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(27, 23, 40, 0.45)',
+    justifyContent: 'flex-end',
+    padding: 12,
+  },
+  sheet: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 28,
+    padding: 22,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.9)',
+    ...Shadows.elevated,
+    marginBottom: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  title: {
+    fontFamily: Typography.fontFamilyBold,
+    fontSize: 20,
+    color: Colors.foreground,
+  },
+  subtitle: {
+    fontFamily: Typography.fontFamilyRegular,
+    fontSize: 13,
+    color: Colors.mutedForeground,
+    marginTop: 2,
+  },
+  closeBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: Colors.muted,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  optionsList: {
+    gap: 10,
+    marginBottom: 16,
+  },
+  optionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    padding: 14,
+    borderRadius: 20,
+    backgroundColor: Colors.background,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  iconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  optionInfo: {
+    flex: 1,
+  },
+  optionTitle: {
+    fontFamily: Typography.fontFamilySemiBold,
+    fontSize: 15,
+    color: Colors.foreground,
+  },
+  optionDesc: {
+    fontFamily: Typography.fontFamilyRegular,
+    fontSize: 12,
+    color: Colors.mutedForeground,
+    marginTop: 2,
+  },
+  weightCard: {
+    backgroundColor: 'rgba(246, 247, 250, 0.8)',
+    borderRadius: 20,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  weightHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 10,
+  },
+  weightTitle: {
+    fontFamily: Typography.fontFamilySemiBold,
+    fontSize: 13,
+    color: Colors.foreground,
+  },
+  weightInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  input: {
+    flex: 1,
+    height: 44,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    paddingHorizontal: 12,
+    fontFamily: Typography.fontFamilyBold,
+    fontSize: 16,
+    color: Colors.foreground,
+  },
+  unitText: {
+    fontFamily: Typography.fontFamilyMedium,
+    fontSize: 14,
+    color: Colors.mutedForeground,
+  },
+  saveWeightBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.primary,
+    height: 44,
+    paddingHorizontal: 18,
+    borderRadius: 12,
+  },
+  saveWeightBtnText: {
+    fontFamily: Typography.fontFamilySemiBold,
+    fontSize: 13,
+    color: '#FFFFFF',
+  },
+});
