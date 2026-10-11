@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.adilkhan.bulkbuddy"
+      "bundleIdentifier": "com.adilkhan.bulkbuddy",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.adilkhan.bulkbuddy",
