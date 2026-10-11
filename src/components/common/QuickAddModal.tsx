@@ -111,15 +111,18 @@ export function QuickAddModal({
                 </View>
 
                 <View style={styles.weightInputRow}>
-                  <TextInput
-                    style={styles.input}
-                    value={weight}
-                    onChangeText={setWeight}
-                    keyboardType="decimal-pad"
-                    placeholder="62.5"
-                    placeholderTextColor={Colors.mutedForeground}
-                  />
-                  <Text style={styles.unitText}>kg</Text>
+                  <View style={styles.inputWrapper}>
+                    <TextInput
+                      style={styles.input}
+                      value={weight}
+                      onChangeText={setWeight}
+                      keyboardType="decimal-pad"
+                      placeholder="62.5"
+                      placeholderTextColor={Colors.mutedForeground}
+                    />
+                    <Text style={styles.unitText}>kg</Text>
+                  </View>
+
                   <PressableScale
                     style={styles.saveWeightBtn}
                     onPress={handleSaveWeight}
@@ -234,37 +237,53 @@ const styles = StyleSheet.create({
   weightInputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
+    width: '100%',
   },
-  input: {
+  inputWrapper: {
     flex: 1,
-    height: 44,
+    minWidth: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 46,
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    borderRadius: 14,
     borderWidth: 1,
     borderColor: Colors.border,
     paddingHorizontal: 12,
+  },
+  input: {
+    flex: 1,
+    minWidth: 0,
+    height: '100%',
+    padding: 0,
     fontFamily: Typography.fontFamilyBold,
     fontSize: 16,
     color: Colors.foreground,
+    includeFontPadding: false,
   },
   unitText: {
     fontFamily: Typography.fontFamilyMedium,
-    fontSize: 14,
+    fontSize: 13,
     color: Colors.mutedForeground,
+    marginLeft: 4,
+    includeFontPadding: false,
   },
   saveWeightBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
     backgroundColor: Colors.primary,
-    height: 44,
-    paddingHorizontal: 18,
-    borderRadius: 12,
+    height: 46,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    flexShrink: 0,
   },
   saveWeightBtnText: {
     fontFamily: Typography.fontFamilySemiBold,
     fontSize: 13,
     color: '#FFFFFF',
+    includeFontPadding: false,
   },
 });
