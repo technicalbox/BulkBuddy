@@ -143,7 +143,7 @@ export default function ProfileScreen() {
             <View style={[styles.iconBox, { backgroundColor: Colors.skySoft }]}>
               <Target size={18} color={Colors.sky} />
             </View>
-            <View>
+            <View style={styles.sectionHeaderText}>
               <Text style={styles.sectionTitle}>Daily goals</Text>
               <Text style={styles.sectionSubtitle}>
                 Today updates as soon as these values are saved.
@@ -304,7 +304,7 @@ export default function ProfileScreen() {
             <View style={[styles.iconBox, { backgroundColor: Colors.lavenderSoft }]}>
               <Bell size={18} color={Colors.lavender} />
             </View>
-            <View>
+            <View style={styles.sectionHeaderText}>
               <Text style={styles.sectionTitle}>Reminders</Text>
               <Text style={styles.sectionSubtitle}>
                 Preference placeholders for prototype scope.
@@ -349,7 +349,7 @@ export default function ProfileScreen() {
             <View style={[styles.iconBox, { backgroundColor: Colors.orangeSoft }]}>
               <Eye size={18} color={Colors.orange} />
             </View>
-            <View>
+            <View style={styles.sectionHeaderText}>
               <Text style={styles.sectionTitle}>Accessibility</Text>
               <Text style={styles.sectionSubtitle}>
                 Calmer visual experience independent of system settings.
@@ -379,7 +379,7 @@ export default function ProfileScreen() {
             <View style={[styles.iconBox, { backgroundColor: Colors.successSoft }]}>
               <ShieldCheck size={18} color={Colors.success} />
             </View>
-            <View>
+            <View style={styles.sectionHeaderText}>
               <Text style={styles.sectionTitle}>Privacy & demo data</Text>
               <Text style={styles.sectionSubtitle}>
                 Local only—no cloud database or tracking.
@@ -474,6 +474,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     marginBottom: 16,
+  },
+  sectionHeaderText: {
+    flex: 1,
+    minWidth: 0,
   },
   iconBox: {
     width: 38,

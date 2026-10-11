@@ -535,6 +535,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamilySemiBold,
     fontSize: 13,
     color: Colors.foreground,
+    flex: 1,
   },
   insightValRow: {
     flexDirection: 'row',
